@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Chart.Name }}-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-dev-wcard"
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+spec:
+  ingressClassName: "nginx"
+  tls:
+    - hosts:
+        - "*.{{ .Values.term }}.meancat.com"
+      secretName: "{{ .Values.term }}.meancat.com"
+  rules:
+    - host: {{ .Release.Namespace }}.{{ .Values.term }}.meancat.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Chart.Name }}
+                port:
+                  number: {{ .Values.service.port }}

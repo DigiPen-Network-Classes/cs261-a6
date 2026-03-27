@@ -1,0 +1,23 @@
+replicaCount: 1
+term: cs261-s26
+image:
+  repository: registry.digitalocean.com/cs261-s26/<student-id-here>
+  tag: latest
+  pullPolicy: Always
+
+service:
+  port: 3100
+  type: ClusterIP
+
+redis:
+  host: "redis.default.svc.cluster.local"
+  port: 6379
+  expire_sec: 10
+
+mongo:
+  host: "mongodb.default.svc.cluster.local"
+  port: 27017
+  collection: "users"
+
+gameServer:
+  port: 4200

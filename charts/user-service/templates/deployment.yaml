@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Namespace }}-sa
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        env:
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secrets
+                key: username
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secrets
+                key: password
+          - name: REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                name: redis-creds
+                key: password
+          - name: SHARED_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: game-server-secret
+                key: shared-secret
+        envFrom:
+          - configMapRef:
+              name:  {{ .Chart.Name }}-configmap
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
