@@ -10,14 +10,14 @@ service:
   type: ClusterIP
 
 redis:
-  host: "redis.default.svc.cluster.local"
+  host: <redis-host-name-here>
   port: 6379
   expire_sec: 10
 
 mongo:
-  host: "mongodb.default.svc.cluster.local"
+  host: <mongo-host-name-here>
   port: 27017
-  collection: "users"
+  collection: <collection-name-here>
 
 gameServer:
   port: 4200
