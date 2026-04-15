@@ -4,7 +4,6 @@ metadata:
   name: {{ .Chart.Name }}-ingress
   namespace: {{ .Release.Namespace }}
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-dev-wcard"
     nginx.ingress.kubernetes.io/service-upstream: "true"
 spec:
   ingressClassName: "nginx"
